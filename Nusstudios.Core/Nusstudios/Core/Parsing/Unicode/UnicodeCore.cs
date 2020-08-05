@@ -114,17 +114,12 @@ namespace Nusstudios.Core.Parsing.Unicode
             BigRational d = 0;
 
             for (int i = 1; i <= codepoints.Length; i++)
-            {
                 d = d + (BigRational.Pow(10, i * -1) * ReadDigit(codepoints[i - 1]));
-            }
 
             return d;
         }
 
-        public static BigRational InterpretAsMantissa(UnicodeStream stream)
-        {
-            return InterpretAsMantissa(stream.CodePoints.ToArray());
-        }
+        public static BigRational InterpretAsMantissa(UnicodeStream stream) => InterpretAsMantissa(stream.CodePoints.ToArray());
 
         public static BigRational FractionToDouble(UnicodeStream stream, UInt64 decPt)
         {
@@ -140,14 +135,10 @@ namespace Nusstudios.Core.Parsing.Unicode
             BigRational d = 0;
 
             for (int i = 0; i < fract[0].Length; i++)
-            {
                 d = d + (BigRational.Pow(10, i) * ReadDigit(fract[0][fract[0].Length - (i + 1)]));
-            }
 
             for (int i = 1; i <= fract[1].Length; i++)
-            {
                 d = d + (BigRational.Pow(10, i * -1) * ReadDigit(fract[1][i - 1]));
-            }
 
             return d;
         }
@@ -160,9 +151,7 @@ namespace Nusstudios.Core.Parsing.Unicode
             UInt64 n = 0;
 
             for (int i = 0; i < codepoints.Length; i++)
-            {
                 n += (UInt64)Math.Pow(10, i) * (UInt64)ReadDigit(codepoints[codepoints.Length - (i + 1)]);
-            }
 
             return n;
         }
@@ -172,9 +161,7 @@ namespace Nusstudios.Core.Parsing.Unicode
             UInt64 dec = 0;
 
             for (int i = 0; i < stream.Length; i++)
-            {
                 dec += (UInt64)Math.Pow(10, i) * (UInt64)ReadDigit(stream.CharAt(stream.Length - (i + 1)));
-            }
 
             return dec;
         }
@@ -184,9 +171,7 @@ namespace Nusstudios.Core.Parsing.Unicode
             UInt64 dec = 0;
 
             for (int i = 0; i < stream.Length; i++)
-            {
                 dec += (UInt64)Math.Pow(16, i) * (UInt64)ReadHexValue(stream.CharAt(stream.Length - (i + 1)));
-            }
 
             return dec;
         }
@@ -194,13 +179,9 @@ namespace Nusstudios.Core.Parsing.Unicode
         public static int ReadDigit(UInt64 codepoint)
         {
             if (IsDigit(codepoint))
-            {
                 return (int)(codepoint - UnicodeConsts.Zero);
-            }
             else
-            {
                 throw new Exception();
-            }
         }
 
         public static int ReadHexValue(UInt64 codepoint)
@@ -208,22 +189,14 @@ namespace Nusstudios.Core.Parsing.Unicode
             if (IsLetter(codepoint))
             {
                 if (IsUpperCaseLetter(codepoint))
-                {
                     return (int)(10 + (codepoint - UnicodeConsts.A));
-                }
                 else
-                {
                     return (int)(10 + (codepoint - UnicodeConsts.a));
-                }
             }
             else if (IsDigit(codepoint))
-            {
                 return (int)(codepoint - UnicodeConsts.Zero);
-            }
             else
-            {
                 throw new Exception();
-            }
         }
 
         public static bool IsLetter(UInt64 codepoint)
@@ -261,10 +234,8 @@ namespace Nusstudios.Core.Parsing.Unicode
         public static bool IsNumber(UnicodeStream stream)
         {
             for (int i = 0; i < stream.Length; i++)
-            {
                 if (!IsDigit(stream.CharAt(i)))
                     return false;
-            }
 
             return true;
         }
@@ -272,10 +243,8 @@ namespace Nusstudios.Core.Parsing.Unicode
         public static bool IsNumber(UInt64[] stream)
         {
             for (int i = 0; i < stream.Length; i++)
-            {
                 if (!IsDigit(stream[i]))
                     return false;
-            }
 
             return true;
         }
@@ -284,11 +253,11 @@ namespace Nusstudios.Core.Parsing.Unicode
         {
             int exp = 7;
             int num = 0;
+
             for (int e = exp; e > 0; e--)
             {
                 if (b >= Math.Pow(2, e))
                 {
-
                     b -= (byte)Math.Pow(2, e);
                     num++;
                 }
@@ -299,9 +268,7 @@ namespace Nusstudios.Core.Parsing.Unicode
             if (num == 1)
                 throw new Exception();
             else if (num == 0)
-            {
                 return 1;
-            }
             else
                 return num;
         }
@@ -311,9 +278,7 @@ namespace Nusstudios.Core.Parsing.Unicode
             List<byte> stream = new List<byte>();
 
             for (int i = 0; i < codePoints.Count; i++)
-            {
                 stream.AddRange(EncodeCP(codePoints[i], enc));
-            }
 
             return stream.ToArray();
         }
@@ -386,10 +351,14 @@ namespace Nusstudios.Core.Parsing.Unicode
                 if (codepoint == 0) return new byte[] { 0 };
                 int e;
                 UInt64 cpy = codepoint;
-                for (e = 0; codepoint > Math.Pow(2, e); e++) { cpy -= (ulong)Math.Pow(2, e); }
+
+                for (e = 0; codepoint > Math.Pow(2, e); e++)
+                    cpy -= (ulong)Math.Pow(2, e);
+
                 e++;
                 int codeunits = 1;
                 int continuations = 0;
+
                 if (e <= 7)
                 {
                     codeunits = 1;
@@ -415,6 +384,7 @@ namespace Nusstudios.Core.Parsing.Unicode
 
                     cpy = codepoint;
                     byte[] encoded = new byte[codeunits];
+
                     for (int i = 1; i <= continuations; i++)
                     {
                         byte cu = (byte)(((byte)cpy) & 0x3F);
@@ -444,9 +414,7 @@ namespace Nusstudios.Core.Parsing.Unicode
             else if (Encoding.UTF16BE == enc ^ Encoding.UTF16LE == enc)
             {
                 if (codepoint < 0x10000)
-                {
                     return ByteConverter.UInt16ToBytes((ushort)codepoint, Encoding.UTF16LE == enc);
-                }
                 else
                 {
                     ulong cp = codepoint - 0x10000;
@@ -463,9 +431,7 @@ namespace Nusstudios.Core.Parsing.Unicode
                 }
             }
             else
-            {
                 return ByteConverter.UInt32ToBytes((uint)codepoint, Encoding.UTF32LE == enc);
-            }
         }
 
         public static UInt64 DecodeCPAt(byte[] buff, ref int position, Encoding enc)
@@ -476,14 +442,19 @@ namespace Nusstudios.Core.Parsing.Unicode
                     return buff[0];
                 if ((buff[0] & 0xC0) == 128)
                     throw new Exception();
+
                 int codeunits = 0;
                 int i;
+
                 for (i = 0; buff[i] == 255; i++)
                     codeunits += 8;
+
                 byte cpy = buff[i];
                 int x;
+
                 for (x = 7; cpy >= (byte)Math.Pow(2, x); x--, codeunits++)
                     cpy -= (byte)Math.Pow(2, x);
+
                 int shift = 8 - (x + 1);
                 cpy = (byte)(buff[i] << shift);
                 cpy >>= shift;
@@ -494,8 +465,10 @@ namespace Nusstudios.Core.Parsing.Unicode
                 {
                     res <<= 6;
                     byte cu = buff[y];
+
                     if ((cu & 0xC0) != 128)
                         throw new Exception();
+
                     cu &= 0x3F;
                     res |= cu;
                 }
@@ -543,9 +516,7 @@ namespace Nusstudios.Core.Parsing.Unicode
                 UInt16 first = (ushort)((sub[1] << 8) | sub[0]);
 
                 if (first < 0xD800 ^ first > 0xDFFF)
-                {
                     return first;
-                }
                 else if (first >= 0xD800 && first <= 0xDBFF)
                 {
                     if ((buff.Length - position) < 2)
@@ -571,9 +542,7 @@ namespace Nusstudios.Core.Parsing.Unicode
                     }
                 }
                 else
-                {
                     throw new Exception();
-                }
             }
             else
             {
@@ -585,9 +554,7 @@ namespace Nusstudios.Core.Parsing.Unicode
                 position += 4;
 
                 if (Encoding.UTF32BE == enc)
-                {
                     Array.Reverse(sub);
-                }
 
                 UInt32 codepoint = 0;
 

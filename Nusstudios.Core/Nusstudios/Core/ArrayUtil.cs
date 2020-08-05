@@ -208,6 +208,34 @@ namespace Nusstudios.Core
             return result.ToArray();
         }
 
+        public static int[] KMP<T>(T[] array, T[] delimiter, bool removeEMptyEntries)
+        {
+            int ptrni = 0, i = 0;
+            List<int> occurrences = new List<int>();
+            int[] tbl = TBL(array);
+
+            while (i < array.Length)
+            {
+                if (Equals(array[i], delimiter[ptrni]))
+                {
+                    if (ptrni == delimiter.Length - 1)
+                    {
+                        occurrences.Add(i - ptrni);
+                        ptrni = tbl[ptrni];
+                    }
+
+                    i++;
+                    ptrni++;
+                }
+                else if (ptrni == 0)
+                    i++;
+                else
+                    ptrni = tbl[ptrni - 1];
+            }
+
+            return occurrences.ToArray();
+        }
+
         public static T[][] SplitArray<T>(T[] array, T[] delimiter, bool removeEmptyEntries)
         {
             int toPlus1 = -1;
