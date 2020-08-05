@@ -1,0 +1,7 @@
+/Users/patrik.nusszer/Projects/Nusstudios.Core/Nusstudios.Core/bin/Release/netstandard2.1/Nusstudios.Core.deps.json
+/Users/patrik.nusszer/Projects/Nusstudios.Core/Nusstudios.Core/bin/Release/netstandard2.1/Nusstudios.Core.dll
+/Users/patrik.nusszer/Projects/Nusstudios.Core/Nusstudios.Core/bin/Release/netstandard2.1/Nusstudios.Core.pdb
+/Users/patrik.nusszer/Projects/Nusstudios.Core/Nusstudios.Core/obj/Release/netstandard2.1/Nusstudios.Core.AssemblyInfoInputs.cache
+/Users/patrik.nusszer/Projects/Nusstudios.Core/Nusstudios.Core/obj/Release/netstandard2.1/Nusstudios.Core.AssemblyInfo.cs
+/Users/patrik.nusszer/Projects/Nusstudios.Core/Nusstudios.Core/obj/Release/netstandard2.1/Nusstudios.Core.dll
+/Users/patrik.nusszer/Projects/Nusstudios.Core/Nusstudios.Core/obj/Release/netstandard2.1/Nusstudios.Core.pdb
